@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}خروج از حساب{% endblock %}
+
+{% block content %}
+<style>
+  .logout-container {
+    max-width: 450px;
+    margin: 60px auto;
+    padding: 20px;
+    animation: fadeInUp 0.6s ease;
+  }
+
+  .logout-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 35px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(5, 150, 105, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.12);
+  }
+
+  .logout-icon {
+    font-size: 70px;
+    color: #EF4444;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .logout-card h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #064E3B;
+    margin-bottom: 12px;
+  }
+
+  .logout-card p {
+    color: #6B7280;
+    font-size: 16px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  .logout-card .username {
+    display: inline-block;
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: white;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 8px 0 20px;
+  }
+
+  .logout-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .btn-confirm {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-confirm:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.6);
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  }
+
+  .btn-cancel {
+    background: #ECFDF5;
+    color: #064E3B;
+    border: 2px solid #D1FAE5;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-cancel:hover {
+    background: #D1FAE5;
+    border-color: #10B981;
+    transform: translateY(-2px);
+  }
+
+  .warning-box {
+    background: #FEF9E7;
+    border-right: 4px solid #F59E0B;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: right;
+    font-size: 14px;
+    color: #6B7280;
+  }
+
+  .warning-box i {
+    color: #F59E0B;
+    margin-left: 8px;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .logout-container { margin: 20px auto; padding: 10px; }
+    .logout-card { padding: 25px 20px; }
+    .logout-card h1 { font-size: 22px; }
+    .logout-icon { font-size: 50px; }
+    .logout-actions { flex-direction: column; }
+    .btn-confirm, .btn-cancel { width: 100%; justify-content: center; }
+  }
+</style>
+
+<div class="logout-container">
+  <div class="logout-card">
+    <span class="logout-icon">🚪</span>
+    <h1>خروج از حساب</h1>
+    <p>آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟</p>
+
+    <div class="username">
+      <i class="fas fa-user"></i> {{ user.username }}
+    </div>
+
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i>
+      پس از خروج، برای دسترسی مجدد باید دوباره وارد شوید.
+    </div>
+
+    <div class="logout-actions">
+      <form method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn-confirm">
+          <i class="fas fa-sign-out-alt"></i> بله، خارج شو
+        </button>
+      </form>
+
+      <a href='/home/' class="btn-cancel">
+        <i class="fas fa-arrow-left"></i> انصراف
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

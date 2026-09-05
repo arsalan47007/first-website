@@ -1,11 +1,287 @@
-<h1>Login</h1>
+{% extends "base.html" %}
+{% block title %}ورود به PulseCheck{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
+{% block content %}
+<style>
+  .login-container {
+    max-width: 420px;
+    margin: 40px auto;
+    padding: 20px;
+    animation: fadeInUp 0.6s ease;
+  }
 
-    {{ form }}
+  .login-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 35px;
+    box-shadow: 0 10px 40px rgba(5, 150, 105, 0.08);
+    border: 1px solid rgba(5, 150, 105, 0.08);
+    transition: all 0.3s ease;
+  }
 
-    <button type="submit">
-        Login
-    </button>
-</form>
+  .login-card:hover {
+    box-shadow: 0 15px 50px rgba(5, 150, 105, 0.15);
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .login-header .icon {
+    font-size: 48px;
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .login-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #064E3B;
+    margin: 0;
+  }
+
+  .login-header p {
+    font-size: 14px;
+    color: #6B7280;
+    margin-top: 6px;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #064E3B;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-group label i {
+    color: #059669;
+    width: 18px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #ECFDF5;
+    box-sizing: border-box;
+    direction: ltr;
+  }
+
+  .form-group input:focus {
+    border-color: #059669;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.10);
+    background: white;
+  }
+
+  .form-group input::placeholder {
+    color: #9CA3AF;
+    font-size: 14px;
+  }
+
+  .form-errors {
+    background: #FEE2E2;
+    color: #991B1B;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    border-right: 4px solid #EF4444;
+    margin-bottom: 10px;
+  }
+
+  .form-errors ul {
+    margin: 0;
+    padding-right: 20px;
+  }
+
+  .form-errors li {
+    margin: 4px 0;
+  }
+
+  .field-error {
+    color: #EF4444;
+    font-size: 13px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .field-error i {
+    font-size: 14px;
+  }
+
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  .form-options label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6B7280;
+    cursor: pointer;
+  }
+
+  .form-options label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #059669;
+    cursor: pointer;
+  }
+
+  .form-options a {
+    color: #059669;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .form-options a:hover {
+    color: #064E3B;
+    text-decoration: underline;
+  }
+
+  .btn-login {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .btn-login:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(5, 150, 105, 0.6);
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+  }
+
+  .btn-login:active {
+    transform: translateY(0px);
+  }
+
+  .login-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #ECFDF5;
+    font-size: 14px;
+    color: #6B7280;
+  }
+
+  .login-footer a {
+    color: #059669;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .login-footer a:hover {
+    color: #064E3B;
+    text-decoration: underline;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .login-container { margin: 20px auto; padding: 10px; }
+    .login-card { padding: 25px 20px; }
+    .login-header h1 { font-size: 22px; }
+    .login-header .icon { font-size: 36px; }
+    .form-group input { padding: 10px 14px; font-size: 14px; }
+    .btn-login { padding: 12px; font-size: 16px; }
+    .form-options { flex-direction: column; gap: 10px; align-items: flex-start; }
+  }
+</style>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <span class="icon"><i class="fas fa-heartbeat"></i></span>
+      <h1>ورود به PulseCheck</h1>
+      <p>برای ادامه، وارد حساب کاربری خود شوید</p>
+    </div>
+
+    <form method="post" class="login-form">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="form-errors">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ form.non_field_errors }}
+      </div>
+      {% endif %}
+
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">
+          <i class="{% if field.name == 'username' %}fas fa-user{% elif field.name == 'password' %}fas fa-lock{% else %}fas fa-circle{% endif %}"></i>
+          {{ field.label }}
+        </label>
+        {{ field }}
+        {% for error in field.errors %}
+        <div class="field-error">
+          <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <div class="form-options">
+        <label>
+          <input type="checkbox" name="remember" id="remember">
+          مرا به خاطر بسپار
+        </label>
+        <a href="#"><i class="fas fa-key"></i> رمز عبور را فراموش کردم</a>
+      </div>
+
+      <button type="submit" class="btn-login">
+        <i class="fas fa-sign-in-alt"></i> ورود
+      </button>
+    </form>
+
+    <div class="login-footer">
+      حساب کاربری ندارید؟ <a href="#">ثبت‌نام کنید</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

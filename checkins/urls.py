@@ -1,12 +1,13 @@
 from django.urls import path
 
-from django.conf import settings
-from django.conf.urls.static import static
-
-from checkins.views import home, get_form, report
+from checkins.views import home, get_form, report , aboutus,logout_confirm
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', home),
-    path('check-in/', get_form),
-    path('report/', report, name='report')
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('add/', get_form),
+    path('report/', report, name='report'),
+    path('about/', aboutus ,name='about_us'),
+#     path('logout/', auth_views.LogoutView.as_view(template_name="registration/logout_confirm"), name='logout'),
+    path('logout/',logout_confirm)
+]

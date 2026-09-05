@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth import logout
 from checkins.models import MoodEntry
 from checkins.forms import MoodEntryForm
 
@@ -10,23 +10,23 @@ def home(requests):
     return render(requests, "checkins/home.html")
 
 
-@login_required
 def get_form(requests):
     if requests.method == 'POST':
         my_form = MoodEntryForm(requests.POST)
+        print(my_form)
         if my_form.is_valid():
-            entry = my_form.save(commit=False)
-            entry.user = requests.user 
-            entry_2 = entry.save()
-
-            return HttpResponse("add success!")
+            mood = my_form.save(commit=False)
+            mood.user = requests.user  
+            mood.save()
+        
+            return redirect('report')
     else:
         my_form = MoodEntryForm()
 
     return render(
         requests,
         "checkins/entry_form.html",
-        {"form": my_form}
+        {"django_form": my_form}
     )
 
 
@@ -42,3 +42,17 @@ def report(requests):
         # selected_date, low_only, avg_score
         {"entries": entry, "count": entry.count()}
     )
+def aboutus(requests):
+    return render(
+        requests,"checkins/about.html",
+
+    )
+@login_required
+def logout_confirm(request):
+    if request.method == 'POST':
+        # خروج کاربر
+        logout(request)
+        return redirect('login')  # بعد از خروج به صفحه ورود برود
+    
+    # نمایش صفحه تأیید خروج (GET)
+    return render(request, 'checkins/logout_confirm.html')

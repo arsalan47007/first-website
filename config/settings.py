@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-l%p--u2kk^j0np5c*upz50hbfz+m+m*qnah&5#d8zhb4n_lzp!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -117,11 +117,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
+LOGIN_URL = '/login/'                      # صفحه ورود
+LOGIN_REDIRECT_URL = '/home/'                   # بعد از ورود به خانه برود
+LOGOUT_REDIRECT_URL = '/login/'  
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 

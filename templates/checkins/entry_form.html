@@ -1,18 +1,215 @@
 {% extends "base.html" %}
 {% block title %}ثبت حال امروز{% endblock %}
+
 {% block content %}
-<h1>ثبت حال امروز</h1>
-<form method="post" class="card form-card">
-  {% csrf_token %}
-  {{ form.non_field_errors }}
-  {% for field in form %}
-    <label>
-      <span>{{ field.label }}</span>
-      {{ field }}
-      {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
-      {% for error in field.errors %}<strong class="error">{{ error }}</strong>{% endfor %}
-    </label>
-  {% endfor %}
-  <button type="submit">ذخیره</button>
-</form>
+<style>
+  .mood-form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(5, 150, 105, 0.08);
+    border: 1px solid rgba(5, 150, 105, 0.06);
+    animation: fadeInUp 0.6s ease;
+  }
+
+  .form-title {
+    text-align: center;
+    font-size: 28px;
+    color: #064E3B;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #10B981;
+    font-weight: 700;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+    background: #ECFDF5;
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .form-group:hover {
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .form-label {
+    display: block;
+    font-weight: 600;
+    color: #064E3B;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .required-star {
+    color: #EF4444;
+    margin-left: 4px;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: #059669;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.10);
+  }
+
+  .form-field textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .help-text {
+    display: block;
+    font-size: 13px;
+    color: #6B7280;
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  .field-error {
+    color: #EF4444;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 8px 12px;
+    background: #FEE2E2;
+    border-radius: 8px;
+    border-right: 4px solid #EF4444;
+  }
+
+  .form-errors {
+    background: #FEE2E2;
+    color: #991B1B;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-right: 4px solid #EF4444;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+    letter-spacing: 1px;
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 30px rgba(5, 150, 105, 0.6);
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+  }
+
+  .btn-cancel {
+    background: #ECFDF5;
+    color: #064E3B;
+    border: 2px solid #D1FAE5;
+    padding: 14px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-cancel:hover {
+    background: #D1FAE5;
+    border-color: #10B981;
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  ::placeholder {
+    color: #9CA3AF;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .mood-form-container {
+      margin: 20px;
+      padding: 20px;
+    }
+    .form-title { font-size: 22px; }
+    .form-actions { flex-direction: column; }
+    .btn-submit, .btn-cancel { width: 100%; justify-content: center; }
+  }
+</style>
+
+<div class="mood-form-container">
+  <h1 class="form-title">📝 ثبت حال امروز</h1>
+  
+  <form method="post" class="mood-form">
+    {% csrf_token %}
+    
+    {% if django_form.non_field_errors %}
+    <div class="form-errors">
+      {{ django_form.non_field_errors }}
+    </div>
+    {% endif %}
+    
+    {% for field in django_form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}" class="form-label">
+        {{ field.label }}
+        {% if field.field.required %}<span class="required-star">*</span>{% endif %}
+      </label>
+      
+      <div class="form-field">
+        {{ field }}
+      </div>
+      
+      {% if field.help_text %}
+      <small class="help-text">{{ field.help_text }}</small>
+      {% endif %}
+      
+      {% for error in field.errors %}
+      <div class="field-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    
+    <div class="form-actions">
+      <button type="submit" class="btn-submit">💾 ذخیره</button>
+      <a href="{% url 'report' %}" class="btn-cancel">انصراف</a>
+    </div>
+  </form>
+</div>
 {% endblock %}
