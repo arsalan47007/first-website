@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-l%p--u2kk^j0np5c*upz50hbfz+m+m*qnah&5#d8zhb4n_lzp!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['arsalan47007.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -119,7 +119,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 LOGIN_URL = '/login/'                      # صفحه ورود
-LOGIN_REDIRECT_URL = ''                   # بعد از ورود به خانه برود
+LOGIN_REDIRECT_URL = '/report/'                   # بعد از ورود به خانه برود
 LOGOUT_REDIRECT_URL = '/login/'  
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
