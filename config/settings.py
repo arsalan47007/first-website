@@ -119,7 +119,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 LOGIN_URL = '/login/'                      # صفحه ورود
-LOGIN_REDIRECT_URL = '/home/'                   # بعد از ورود به خانه برود
+LOGIN_REDIRECT_URL = ''                   # بعد از ورود به خانه برود
 LOGOUT_REDIRECT_URL = '/login/'  
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
